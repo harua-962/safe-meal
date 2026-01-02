@@ -12,4 +12,5 @@ build/
 
 # IDE / OS
 .vscode/
-.DS_Store.env
+.DS_Store
+.env

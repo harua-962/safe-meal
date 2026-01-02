@@ -62,8 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
 
-            if (data.error) {
-                alert("エラー: " + data.error);
+            if (!response.ok || data.error) {
+                // サーバーからのエラーメッセージを表示
+                alert("エラー: " + (data.error || "レシピの生成に失敗しました"));
             } else {
                 // 結果を表示する
                 resultContent.innerHTML = `
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error(error);
-            alert("通信エラーが発生しました。");
+            alert("ネットワークエラーが発生しました。インターネット接続を確認してください。");
         } finally {
             // ボタンを元に戻す
             analyzeBtn.disabled = false;
