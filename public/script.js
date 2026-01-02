@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const lifelineBtns = document.querySelectorAll('#lifelines .toggle-btn');
     const allergyBtns = document.querySelectorAll('#allergies .toggle-btn');
     const otherAllergy = document.getElementById('otherAllergy');
-    const loading = document.getElementById('loading');
     const resultCard = document.getElementById('resultCard');
     const resultContent = document.getElementById('resultContent');
 
@@ -16,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => btn.classList.toggle('active'));
     });
     allergyBtns.forEach(btn => {
-        btn.addEventListener('click', () => btn.classList.toggle('active'));
+        btn. addEventListener('click', () => btn.classList.toggle('active'));
     });
 
     //ここからがAIに送信する処理
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const ingredients = rawInput
             .split('\n')
             .map(line => line.trim())
-            .filter(line => line.length > 0)
+            .filter(line => line. length > 0)
             .join(', ');
         
         const memo = ingredientsMemo.value.trim();
@@ -53,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 画面を「考え中」モードにする
         analyzeBtn.disabled = true;
         buttonText.innerText = "AIシェフが思考中...  🧑‍🍳";
-        loading.style.display = 'block';
         resultCard.style.display = 'none';
 
         try {
@@ -69,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
 
-            const data = await response.json();
+            const data = await response. json();
 
             if (! response.ok || data.error) {
                 // サーバーからのエラーメッセージを表示
@@ -77,8 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 // 結果を表示する
                 resultContent.innerHTML = `
-                    <h2 style="color:#ff6b6b; border-bottom: 2px solid #ff6b6b;">🍳 提案レシピ</h2>
-                    <pre style="white-space:  pre-wrap; font-family: sans-serif; line-height: 1.6;">${data.result}</pre>
+                    <h2 style="color:#ff6b6b; border-bottom:2px solid #ff6b6b;">🍳 提案レシピ</h2>
+                    <pre style="white-space:  pre-wrap; font-family:  sans-serif; line-height: 1.6;">${data.result}</pre>
                 `;
                 resultCard.style.display = 'block';
             }
@@ -90,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // ボタンを元に戻す
             analyzeBtn.disabled = false;
             buttonText.innerText = "この条件でレシピを聞く 🍳";
-            loading.style.display = 'none';
         }
     });
 });
