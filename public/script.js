@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => btn.classList.toggle('active'));
     });
     allergyBtns.forEach(btn => {
-        btn. addEventListener('click', () => btn.classList.toggle('active'));
+        btn.addEventListener('click', () => btn.classList.toggle('active'));
     });
 
     //ここからがAIに送信する処理
@@ -73,10 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 // サーバーからのエラーメッセージを表示
                 alert("エラー: " + (data.error || "レシピの生成に失敗しました"));
             } else {
-                // 結果を表示する
+                // 結果を表示する - マークダウン形式を簡易的にHTMLに変換
+                let formattedResult = data.result
+                    // ## 見出しを太字の大きな見出しに変換
+                    .replace(/^## (.+)$/gm, '<h3 style="color:#ff6b6b; font-size:1.3em; margin-top:20px; margin-bottom:10px; border-bottom:2px solid #ff6b6b; padding-bottom:5px;">$1</h3>')
+                    // リスト項目を変換（番号付き）
+                    .replace(/^(\d+)\. (.+)$/gm, '<div style="margin-left:20px; margin-bottom:8px;"><strong>$1.</strong> $2</div>')
+                    // リスト項目を変換（箇条書き）
+                    .replace(/^- (.+)$/gm, '<div style="margin-left:20px; margin-bottom:8px;">• $1</div>')
+                    // 改行を保持
+                    .replace(/\n/g, '<br>');
+                
                 resultContent.innerHTML = `
-                    <h2 style="color:#ff6b6b; border-bottom:2px solid #ff6b6b;">🍳 提案レシピ</h2>
-                    <pre style="white-space:  pre-wrap; font-family:  sans-serif; line-height: 1.6;">${data.result}</pre>
+                    <h2 style="color:#ff6b6b; border-bottom:2px solid #ff6b6b; padding-bottom:10px; margin-bottom:20px;">🍳 提案レシピ</h2>
+                    <div style="line-height: 1.8;">${formattedResult}</div>
                 `;
                 resultCard.style.display = 'block';
             }

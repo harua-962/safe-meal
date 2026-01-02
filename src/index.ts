@@ -81,13 +81,33 @@ app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, 
         const { ingredients, memo, lifelines, allergies } = req. body;
 
         const prompt = `
-        以下の条件で災害時レシピを1つ提案して。
-        【食材】: ${ingredients. trim()}
+        以下の条件で災害時レシピを1つ提案してください。
+        【食材】: ${ingredients.trim()}
         【メモ】: ${memo ? memo.trim() : 'なし'}
         【ライフライン】: ${lifelines.join(', ')}
-        【アレルギー除去】: ${allergies.length > 0 ?  allergies.join(', ') : 'なし'}
+        【アレルギー除去】: ${allergies.length > 0 ? allergies.join(', ') : 'なし'}
         
-        出力: 料理名、材料、作り方、防災ポイント
+        以下の形式で出力してください:
+        
+        ## 料理名
+        [料理名を太字で表示]
+        
+        ## 材料
+        - [材料1]
+        - [材料2]
+        ...
+        
+        ## 作り方
+        1. [手順1]
+2. [手順2]
+        ...
+        
+        ## 防災ポイント
+        - [ポイント1]
+        - [ポイント2]
+        ...
+        
+        重要: 見出しは「##」を使い、リスト項目は「-」または数字を使って、読みやすく整理された形式で出力してください。
         `;
 
         const result = await model.generateContent(prompt);
