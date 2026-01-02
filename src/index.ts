@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 // 環境変数のバリデーション
 const apiKey = process.env.GEMINI_API_KEY?.trim();
 if (!apiKey) {
-    console.error('エラー: GEMINI_API_KEYが設定されていません。.envファイルを確認してください。');
+    console.error('エラー:  GEMINI_API_KEYが設定されていません。. envファイルを確認してください。');
     process.exit(1);
 }
 
@@ -21,48 +21,48 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 
 // CORS設定
 const allowedOrigins = process.env.ALLOWED_ORIGINS 
-    ? process.env.ALLOWED_ORIGINS.split(',') 
+    ? process.env. ALLOWED_ORIGINS.split(',') 
     : ['http://localhost:3000'];
 
-app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (origin && (allowedOrigins.includes('*') || allowedOrigins.includes(origin))) {
+app. use((req, res, next) => {
+    const origin = req. headers.origin;
+    if (origin && (allowedOrigins. includes('*') || allowedOrigins.includes(origin))) {
         res.header('Access-Control-Allow-Origin', origin);
     }
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'Content-Type');
     next();
 });
 
-// Gemini APIの準備
+// Gemini APIの準備 - より利用制限の緩いモデルに変更
 const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: ''gemini-2.5-pro' });
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 // 入力バリデーション関数
 function validateRecipeRequest(body: any): { valid: boolean; error?: string } {
     if (!body.ingredients || typeof body.ingredients !== 'string' || body.ingredients.trim() === '') {
-        return { valid: false, error: '食材リストは必須です' };
+        return { valid:  false, error: '食材リストは必須です' };
     }
     
-    if (!body.lifelines || !Array.isArray(body.lifelines) || body.lifelines.length === 0) {
+    if (! body.lifelines || !Array. isArray(body.lifelines) || body.lifelines.length === 0) {
         return { valid: false, error: '使えるライフラインを最低1つ選択してください' };
     }
     
     if (!Array.isArray(body.allergies)) {
-        return { valid: false, error: 'アレルギー情報の形式が不正です' };
+        return { valid: false, error:  'アレルギー情報の形式が不正です' };
     }
     
     // 入力値のサニタイゼーション（基本的なチェック）
     const ingredientsLength = body.ingredients.trim().length;
     if (ingredientsLength > 1000) {
-        return { valid: false, error: '食材リストが長すぎます（1000文字以内）' };
+        return { valid: false, error:  '食材リストが長すぎます（1000文字以内）' };
     }
     
-    return { valid: true };
+    return { valid:  true };
 }
 
 // ヘルスチェックエンドポイント
-app.get('/api/health', (req: Request, res: Response) => {
+app.get('/api/health', (req:  Request, res: Response) => {
     res.json({ 
         status: 'ok', 
         timestamp: new Date().toISOString(),
@@ -73,32 +73,32 @@ app.get('/api/health', (req: Request, res: Response) => {
 app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, RecipeRequest>, res: Response<RecipeResponse | ErrorResponse>) => {
     try {
         // 入力バリデーション
-        const validation = validateRecipeRequest(req.body);
-        if (!validation.valid) {
-            return res.status(400).json({ error: validation.error || '入力が不正です' });
+        const validation = validateRecipeRequest(req. body);
+        if (!validation. valid) {
+            return res. status(400).json({ error: validation.error || '入力が不正です' });
         }
 
-        const { ingredients, memo, lifelines, allergies } = req.body;
+        const { ingredients, memo, lifelines, allergies } = req. body;
 
         const prompt = `
         以下の条件で災害時レシピを1つ提案して。
-        【食材】: ${ingredients.trim()}
+        【食材】: ${ingredients. trim()}
         【メモ】: ${memo ? memo.trim() : 'なし'}
         【ライフライン】: ${lifelines.join(', ')}
-        【アレルギー除去】: ${allergies.length > 0 ? allergies.join(', ') : 'なし'}
+        【アレルギー除去】: ${allergies.length > 0 ?  allergies.join(', ') : 'なし'}
         
         出力: 料理名、材料、作り方、防災ポイント
         `;
 
         const result = await model.generateContent(prompt);
-        const response = await result.response;
+        const response = await result. response;
         const text = response.text();
         
         res.json({ result: text });
 
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        console.error("APIエラー:", errorMessage);
+        console. error("APIエラー:", errorMessage);
         
         // エラーの種類に応じて適切なメッセージを返す
         if (errorMessage.includes('API_KEY')) {
