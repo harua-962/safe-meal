@@ -34,7 +34,7 @@ app. use((req, res, next) => {
     next();
 });
 
-// Gemini APIの準備 - より利用制限の緩いモデルに変更
+// Gemini APIの準備
 const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
@@ -55,7 +55,7 @@ function validateRecipeRequest(body: any): { valid: boolean; error?: string } {
     // 入力値のサニタイゼーション（基本的なチェック）
     const ingredientsLength = body.ingredients.trim().length;
     if (ingredientsLength > 1000) {
-        return { valid: false, error:  '食材リストが長すぎます（1000文字以内）' };
+        return { valid: false, error:  '1000文字以内で入力してください' };
     }
     
     return { valid:  true };

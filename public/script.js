@@ -1,21 +1,72 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 要素取得
+    const inputPage = document.getElementById('inputPage');
+    const resultPage = document.getElementById('resultPage');
     const analyzeBtn = document.getElementById('analyze-btn');
     const buttonText = document.getElementById('button-text');
+    const backBtn = document.getElementById('back-btn');
     const ingredientsInput = document.getElementById('ingredientsInput');
     const ingredientsMemo = document.getElementById('ingredientsMemo');
     const lifelineBtns = document.querySelectorAll('#lifelines .toggle-btn');
     const allergyBtns = document.querySelectorAll('#allergies .toggle-btn');
     const otherAllergy = document.getElementById('otherAllergy');
-    const resultCard = document.getElementById('resultCard');
     const resultContent = document.getElementById('resultContent');
+
+    // 現在のレシピテキストを保存する変数
+    let currentRecipeText = '';
+    let currentIngredients = '';
+
+    // ページ切り替え関数
+    function showInputPage() {
+        inputPage. classList.add('active');
+        resultPage.classList.remove('active');
+        window.scrollTo(0, 0);
+    }
+
+    function showResultPage() {
+        inputPage.classList.remove('active');
+        resultPage.classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    // SNS共有URL生成関数
+    function updateShareButtons() {
+        const lineShareBtn = document.getElementById('lineShareBtn');
+        const twitterShareBtn = document.getElementById('twitterShareBtn');
+        
+        // ボタンが存在するか確認
+        if (! lineShareBtn || !twitterShareBtn) {
+            console.error('共有ボタンが見つかりません');
+            return;
+        }
+        
+        const appUrl = window.location.origin;
+        
+        // 共有用のテキストを生成（最初の100文字程度）
+        const recipeTitle = currentRecipeText.split('\n')[0] || '災害時レシピ';
+        const shareText = `Safe Meal Vision 🍽️\n${currentIngredients}で作る災害時レシピを生成しました！\n\n${recipeTitle}`;
+        
+        // LINEの共有URL
+        const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(appUrl)}&text=${encodeURIComponent(shareText)}`;
+        lineShareBtn.href = lineUrl;
+        
+        // Twitter(X)の共有URL
+        const twitterText = `${shareText}\n\n#SafeMealVision #災害時レシピ #防災`;
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}&url=${encodeURIComponent(appUrl)}`;
+        twitterShareBtn.href = twitterUrl;
+    }
+
+    // 戻るボタンのイベント
+    backBtn.addEventListener('click', () => {
+        showInputPage();
+    });
 
     // ボタンactive切り替え
     lifelineBtns.forEach(btn => {
         btn.addEventListener('click', () => btn.classList.toggle('active'));
     });
     allergyBtns.forEach(btn => {
-        btn.addEventListener('click', () => btn.classList.toggle('active'));
+        btn. addEventListener('click', () => btn.classList.toggle('active'));
     });
 
     //ここからがAIに送信する処理
@@ -30,7 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .filter(line => line. length > 0)
             .join(', ');
         
-        const memo = ingredientsMemo.value.trim();
+        currentIngredients = ingredients; // 共有用に保存
+        
+        const memo = ingredientsMemo.value. trim();
         
         const lifelines = Array.from(lifelineBtns)
             .filter(btn => btn.classList.contains('active'))
@@ -52,11 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // 画面を「考え中」モードにする
         analyzeBtn.disabled = true;
         buttonText.innerText = "AIシェフが思考中...  🧑‍🍳";
-        resultCard.style.display = 'none';
 
         try {
             // サーバーにデータを送る
-            const response = await fetch('/api/recipe', {  // 送信先URL
+            const response = await fetch('/api/recipe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -67,36 +119,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
 
-            const data = await response. json();
+            const data = await response.json();
 
             if (! response.ok || data.error) {
                 // サーバーからのエラーメッセージを表示
                 alert("エラー: " + (data.error || "レシピの生成に失敗しました"));
             } else {
+                // 生成されたレシピテキストを保存
+                currentRecipeText = data.result;
+                
                 // HTMLエスケープ関数（XSS対策）
                 function escapeHtml(text) {
                     const div = document.createElement('div');
                     div.textContent = text;
-                    return div.innerHTML;
+                    return div. innerHTML;
                 }
                 
                 // 結果を表示する - マークダウン形式を簡易的にHTMLに変換
-                // まずHTMLエスケープしてから、安全なマークダウン変換を適用
-                let formattedResult = escapeHtml(data.result)
-                    // ## 見出しを太字の大きな見出しに変換
-                    .replace(/^## (.+)$/gm, '<h3 style="color:#ff6b6b; font-size:1.3em; margin-top:20px; margin-bottom:10px; border-bottom:2px solid #ff6b6b; padding-bottom:5px;">$1</h3>')
+                let formattedResult = escapeHtml(data. result)
+                    // まず ** を削除（太字記法を除去）
+                    .replace(/\*\*/g, '')
+                    // ### 見出し（h3相当）を太字の大きな見出しに変換
+                    .replace(/^### (. +)$/gm, '<h3 style="color:#ff6b6b; font-size:1.2em; font-weight:bold; margin-top:25px; margin-bottom:12px; border-left:4px solid #ff6b6b; padding-left:10px; background:#fff5f5;">$1</h3>')
+                    // ## 見出し（h2相当）を太字の大きな見出しに変換
+                    .replace(/^## (.+)$/gm, '<h2 style="color:#ff6b6b; font-size:1.4em; font-weight:bold; margin-top:30px; margin-bottom:15px; border-bottom:3px solid #ff6b6b; padding-bottom:8px;">$1</h2>')
                     // リスト項目を変換（番号付き）
-                    .replace(/^(\d+)\. (.+)$/gm, '<div style="margin-left:20px; margin-bottom:8px;"><strong>$1.</strong> $2</div>')
+                    . replace(/^(\d+)\. (.+)$/gm, '<div style="margin-left:20px; margin-bottom: 10px; line-height:1.6;"><strong style="color:#ff6b6b; font-weight:bold;">$1.</strong> $2</div>')
                     // リスト項目を変換（箇条書き）
-                    .replace(/^- (.+)$/gm, '<div style="margin-left:20px; margin-bottom:8px;">• $1</div>')
+                    .replace(/^- (.+)$/gm, '<div style="margin-left:20px; margin-bottom:10px; line-height:1.6;"><span style="color:#ff6b6b; font-weight:bold;">•</span> $1</div>')
                     // 改行を保持
                     .replace(/\n/g, '<br>');
                 
-                resultContent.innerHTML = `
-                    <h2 style="color:#ff6b6b; border-bottom:2px solid #ff6b6b; padding-bottom:10px; margin-bottom:20px;">🍳 提案レシピ</h2>
-                    <div style="line-height: 1.8;">${formattedResult}</div>
-                `;
-                resultCard.style.display = 'block';
+                resultContent. innerHTML = formattedResult;
+                
+                // レシピ結果ページに遷移
+                showResultPage();
+                
+                // ページ遷移後にSNS共有ボタンを更新
+                updateShareButtons();
             }
 
         } catch (error) {

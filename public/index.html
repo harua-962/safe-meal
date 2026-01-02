@@ -1,4 +1,4 @@
-<! DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -10,16 +10,25 @@
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; }
         
+        /* ページ切り替え */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
         /* ボタン類のデザイン */
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-        .toggle-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius:  6px; background: #fff; cursor: pointer; text-align: center; }
+        .toggle-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; text-align: center; }
         .toggle-btn.active { background-color: #ff6b6b; color: white; border-color: #ff6b6b; }
         
         /* 食材メモUIのスタイル */
         .ingredients-memo-area {
             border: 2px dashed #ddd;
-            border-radius:  8px;
-            padding:  10px;
+            border-radius: 8px;
+            padding: 10px;
             min-height: 120px;
             background-color: #fffef8;
             position: relative;
@@ -35,20 +44,20 @@
             resize: vertical;
             outline: none;
             padding: 5px;
-            box-sizing: border-box;
+            box-sizing:  border-box;
             line-height: 1.8;
         }
         
-        .ingredients-memo-area:: before {
+        .ingredients-memo-area::before {
             content: "📝";
             position: absolute;
             top: 10px;
             right: 10px;
-            font-size:  1.5em;
+            font-size: 1.5em;
             opacity: 0.3;
         }
         
-        .ingredient-hint {
+        . ingredient-hint {
             font-size: 0.85em;
             color: #999;
             margin-top: 5px;
@@ -77,7 +86,7 @@
         #analyze-btn:hover: not(:disabled) {
             background-color: #ff5252;
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+            box-shadow:  0 6px 12px rgba(255, 107, 107, 0.4);
         }
         
         /* ボタンが押された後のスタイル（思考中） */
@@ -88,9 +97,9 @@
         }
         
         /* ローディングアニメーション */
-        . spinner {
-            width: 20px;
-            height: 20px;
+        .spinner {
+            width: 24px;
+            height: 24px;
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-top-color: white;
             border-radius: 50%;
@@ -98,68 +107,173 @@
             display: none;
         }
         
-        #analyze-btn: disabled .spinner {
+        #analyze-btn:disabled .spinner {
             display: inline-block;
         }
         
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 戻るボタンのスタイル */
+        #back-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #4E494C;
+            color:  white;
+            border: none;
+            border-radius: 8px;
+            font-size:  1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        #back-btn:hover {
+            background-color: #555;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* SNS共有ボタンのスタイル */
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .share-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size:  1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .share-btn. line {
+            background-color: #06C755;
+        }
+        
+        .share-btn.line:hover {
+            background-color: #05B04C;
+        }
+        
+        . share-btn.twitter {
+            background-color: #1DA1F2;
+        }
+        
+        .share-btn.twitter:hover {
+            background-color: #1A91DA;
         }
         
         /* 警告や結果表示 */
-        .recipe-title { font-size: 1.4em; color: #333; border-bottom: 2px solid #ff6b6b; padding-bottom: 5px; margin-bottom: 10px; }
-        .warning { color: red; font-weight: bold; border:  1px solid red; padding:  10px; border-radius: 6px; background: #fff0f0; font-size: 0.9em; margin-bottom: 15px; }
+        .recipe-title { 
+            font-size: 1.4em; 
+            color: #333; 
+            border-bottom: 2px solid #ff6b6b; 
+            padding-bottom: 5px; 
+            margin-bottom: 10px; 
+        }
+        
+        .warning { 
+            color: red; 
+            font-weight: bold; 
+            border: 1px solid red; 
+            padding: 10px; 
+            border-radius: 6px; 
+            background:  #fff0f0; 
+            font-size: 0.9em; 
+            margin-bottom:  15px; 
+        }
+        
+        #resultContent {
+            line-height: 1.8;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Safe Meal Vision 🍽️</h1>
-    <p style="text-align: center; font-size: 0.9em;">今ある食材を入力だけ。AIが安全なレシピを提案。</p>
-    
-    <div class="card">
-        <label style="margin-bottom: 0. 5em;">🥗 食材リスト (必須)</label>
-        <div class="ingredients-memo-area">
-            <textarea 
-                id="ingredientsInput" 
-                placeholder="例: &#10;パン&#10;ツナ缶&#10;トマト&#10;&#10;※1行に1つずつ自由に書いてください"
-                required
-            ></textarea>
-        </div>
-        <div class="ingredient-hint">💡 1行に1つずつ、メモ感覚で入力できます</div>
-    
-        <label style="margin-top: 15px;">📝 食材メモ (補足・任意)</label>
-        <input type="text" id="ingredientsMemo" placeholder="例:  賞味期限切れのパンがあります" style="width: 100%; padding: 10px; box-sizing: border-box;">
-    </div>
-
-    <div class="card">
-        <label>🔦 使えるライフライン</label>
-        <div class="btn-group" id="lifelines">
-            <div class="toggle-btn" data-value="電気">電気</div>
-            <div class="toggle-btn" data-value="ガス">ガス</div>
-            <div class="toggle-btn active" data-value="水">水</div>
+    <!-- 入力画面 -->
+    <div id="inputPage" class="page active">
+        <h1>Safe Meal Vision 🍽️</h1>
+        <p style="text-align: center; font-size: 0.9em;">今ある食材を入力だけ。AIが安全なレシピを提案。</p>
+        
+        <div class="card">
+            <label style="margin-bottom: 0. 5em;">🥗 食材リスト (必須)</label>
+            <div class="ingredients-memo-area">
+                <textarea 
+                    id="ingredientsInput" 
+                    placeholder="例:  &#10;パン&#10;ツナ缶&#10;トマト&#10;&#10;※1行に1つずつ自由に書いてください"
+                    required
+                ></textarea>
+            </div>
+            <div class="ingredient-hint">💡 1行に1つずつ、メモ感覚で入力できます</div>
+        
+            <label style="margin-top: 15px;">📝 食材メモ (補足・任意)</label>
+            <input type="text" id="ingredientsMemo" placeholder="例: 賞味期限切れのパンがあります" style="width: 100%; padding: 10px; box-sizing: border-box;">
         </div>
 
-        <label style="margin-top: 15px;">🥜 アレルギー (絶対除去)</label>
-        <div class="btn-group" id="allergies">
-            <div class="toggle-btn" data-value="卵">卵</div>
-            <div class="toggle-btn" data-value="乳">乳</div>
-            <div class="toggle-btn" data-value="小麦">小麦</div>
-            <div class="toggle-btn" data-value="えび">えび</div>
-            <div class="toggle-btn" data-value="かに">かに</div>
+        <div class="card">
+            <label>🔦 使えるライフライン</label>
+            <div class="btn-group" id="lifelines">
+                <div class="toggle-btn" data-value="電気">電気</div>
+                <div class="toggle-btn" data-value="ガス">ガス</div>
+                <div class="toggle-btn active" data-value="水">水</div>
+            </div>
+
+            <label style="margin-top: 15px;">🥜 アレルギー (絶対除去)</label>
+            <div class="btn-group" id="allergies">
+                <div class="toggle-btn" data-value="卵">卵</div>
+                <div class="toggle-btn" data-value="乳">乳</div>
+                <div class="toggle-btn" data-value="小麦">小麦</div>
+                <div class="toggle-btn" data-value="えび">えび</div>
+                <div class="toggle-btn" data-value="かに">かに</div>
+            </div>
+            <input type="text" id="otherAllergy" placeholder="その他 (例: そば, 落花生)" style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;">
         </div>
-        <input type="text" id="otherAllergy" placeholder="その他 (例: そば, 落花生)" style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;">
+
+        <div class="card">
+            <button id="analyze-btn">
+                <span id="button-text">この条件でレシピを聞く 🍳</span>
+                <div class="spinner"></div>
+            </button>
+        </div>
     </div>
 
-    <div class="card">
-        <button id="analyze-btn">
-            <span id="button-text">この条件でレシピを聞く 🍳</span>
-            <div class="spinner"></div>
-        </button>
-    </div>
-    
-    <div class="card" id="resultCard" style="display: none;">
-        <div class="warning">⚠️ AI生成レシピです。アレルギー情報は必ずご自身でも最終確認してください。</div>
-        <div id="resultContent"></div>
+    <!-- レシピ結果画面 -->
+    <div id="resultPage" class="page">
+        <h1>Safe Meal Vision 🍽️</h1>
+        
+        <div class="card">
+            <div class="warning">⚠️ AI生成レシピです。アレルギー情報は必ずご自身でも最終確認してください。</div>
+            
+            <h2 style="color:#ff6b6b; border-bottom: 2px solid #ff6b6b; padding-bottom: 10px; margin-bottom: 20px;">🍳 提案レシピ</h2>
+            
+            <div id="resultContent"></div>
+        </div>
+
+        <div class="card">
+            <button id="back-btn">
+                ← 入力画面に戻る
+            </button>
+        </div>
     </div>
 
     <script src="script.js"></script>
