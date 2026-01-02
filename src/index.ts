@@ -99,7 +99,7 @@ app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, 
         
         ## 作り方
         1. [手順1]
-2. [手順2]
+        2. [手順2]
         ...
         
         ## 防災ポイント

@@ -73,8 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 // サーバーからのエラーメッセージを表示
                 alert("エラー: " + (data.error || "レシピの生成に失敗しました"));
             } else {
+                // HTMLエスケープ関数（XSS対策）
+                function escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+                
                 // 結果を表示する - マークダウン形式を簡易的にHTMLに変換
-                let formattedResult = data.result
+                // まずHTMLエスケープしてから、安全なマークダウン変換を適用
+                let formattedResult = escapeHtml(data.result)
                     // ## 見出しを太字の大きな見出しに変換
                     .replace(/^## (.+)$/gm, '<h3 style="color:#ff6b6b; font-size:1.3em; margin-top:20px; margin-bottom:10px; border-bottom:2px solid #ff6b6b; padding-bottom:5px;">$1</h3>')
                     // リスト項目を変換（番号付き）
