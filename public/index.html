@@ -12,14 +12,14 @@
         
         /* ボタン類のデザイン */
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-        .toggle-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; text-align: center; }
-        .toggle-btn.active { background-color: #ff6b6b; color: white; border-color: #ff6b6b; }
+        .toggle-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius:  6px; background: #fff; cursor: pointer; text-align: center; }
+        .toggle-btn. active { background-color: #ff6b6b; color: white; border-color: #ff6b6b; }
         
         /* 食材メモUIのスタイル */
         .ingredients-memo-area {
             border: 2px dashed #ddd;
-            border-radius: 8px;
-            padding: 10px;
+            border-radius:  8px;
+            padding:  10px;
             min-height: 120px;
             background-color: #fffef8;
             position: relative;
@@ -35,7 +35,7 @@
             resize: vertical;
             outline: none;
             padding: 5px;
-            box-sizing:  border-box;
+            box-sizing: border-box;
             line-height: 1.8;
         }
         
@@ -44,11 +44,11 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            font-size: 1.5em;
+            font-size:  1.5em;
             opacity: 0.3;
         }
         
-        . ingredient-hint {
+        .ingredient-hint {
             font-size: 0.85em;
             color: #999;
             margin-top: 5px;
@@ -57,10 +57,10 @@
         /* メインボタンのスタイル */
         #analyze-btn {
             width: 100%;
-            padding: 15px;
+            padding:  15px;
             margin-top: 20px;
             background-color: #ff6b6b;
-            color: white;
+            color:  white;
             border: none;
             border-radius: 8px;
             font-size:  1.1em;
@@ -74,7 +74,7 @@
             gap: 10px;
         }
         
-        #analyze-btn:hover: not(: disabled) {
+        #analyze-btn:hover: not(:disabled) {
             background-color: #ff5252;
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
@@ -88,7 +88,7 @@
         }
         
         /* ローディングアニメーション */
-        .spinner {
+        . spinner {
             width: 20px;
             height: 20px;
             border: 3px solid rgba(255, 255, 255, 0.3);
@@ -98,50 +98,12 @@
             display: none;
         }
         
-        #analyze-btn:disabled .spinner {
+        #analyze-btn: disabled .spinner {
             display: inline-block;
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-        
-        /* 下部のローディング表示 */
-        #loading {
-            text-align: center;
-            margin-top: 20px;
-            display: none;
-            background:  linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
-            color: white;
-            padding: 15px;
-            border-radius:  10px;
-            font-size:  1.1em;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.02);
-                opacity: 0.95;
-            }
-        }
-        
-        #loading . loading-spinner {
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 10px;
         }
         
         /* 警告や結果表示 */
@@ -166,7 +128,7 @@
         <div class="ingredient-hint">💡 1行に1つずつ、メモ感覚で入力できます</div>
     
         <label style="margin-top: 15px;">📝 食材メモ (補足・任意)</label>
-        <input type="text" id="ingredientsMemo" placeholder="例: 賞味期限切れのパンがあります" style="width: 100%; padding: 10px; box-sizing: border-box;">
+        <input type="text" id="ingredientsMemo" placeholder="例:  賞味期限切れのパンがあります" style="width: 100%; padding: 10px; box-sizing: border-box;">
     </div>
 
     <div class="card">
@@ -177,7 +139,7 @@
             <div class="toggle-btn active" data-value="水">水</div>
         </div>
 
-        <label style="margin-top: 15px;">アレルギー (絶対除去)</label>
+        <label style="margin-top: 15px;">🥜 アレルギー (絶対除去)</label>
         <div class="btn-group" id="allergies">
             <div class="toggle-btn" data-value="卵">卵</div>
             <div class="toggle-btn" data-value="乳">乳</div>
@@ -193,11 +155,6 @@
             <span id="button-text">この条件でレシピを聞く 🍳</span>
             <div class="spinner"></div>
         </button>
-    </div>
-
-    <div id="loading">
-        <span>AIシェフが思考中...</span>
-        <div class="loading-spinner"></div>
     </div>
     
     <div class="card" id="resultCard" style="display: none;">
