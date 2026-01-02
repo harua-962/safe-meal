@@ -10,7 +10,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // 環境変数のバリデーション
-if (!process.env.GEMINI_API_KEY) {
+const apiKey = process.env.GEMINI_API_KEY?.trim();
+if (!apiKey) {
     console.error('エラー: GEMINI_API_KEYが設定されていません。.envファイルを確認してください。');
     process.exit(1);
 }
@@ -18,16 +19,23 @@ if (!process.env.GEMINI_API_KEY) {
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), 'public')));
 
-// CORS設定（本番環境では適切なオリジンに制限すること）
+// CORS設定
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(',') 
+    : ['http://localhost:3000'];
+
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    const origin = req.headers.origin;
+    if (origin && (allowedOrigins.includes('*') || allowedOrigins.includes(origin))) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
 
 // Gemini APIの準備
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
 // 入力バリデーション関数
@@ -88,11 +96,12 @@ app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, 
         
         res.json({ result: text });
 
-    } catch (error: any) {
-        console.error("APIエラー:", error.message);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.error("APIエラー:", errorMessage);
         
         // エラーの種類に応じて適切なメッセージを返す
-        if (error.message?.includes('API_KEY')) {
+        if (errorMessage.includes('API_KEY')) {
             return res.status(500).json({ error: 'API設定エラーが発生しました。管理者に連絡してください。' });
         }
         
