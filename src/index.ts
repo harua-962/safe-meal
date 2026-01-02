@@ -53,6 +53,15 @@ function validateRecipeRequest(body: any): { valid: boolean; error?: string } {
     return { valid: true };
 }
 
+// ヘルスチェックエンドポイント
+app.get('/api/health', (req: Request, res: Response) => {
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        version: '1.0.0'
+    });
+});
+
 app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, RecipeRequest>, res: Response<RecipeResponse | ErrorResponse>) => {
     try {
         // 入力バリデーション

@@ -11,12 +11,14 @@
 
 ## セットアップ
 
-### 1. 依存関係のインストール
+### 方法1: ローカル環境での実行
+
+#### 1. 依存関係のインストール
 ```bash
 npm install
 ```
 
-### 2. 環境変数の設定
+#### 2. 環境変数の設定
 `.env.example`を`.env`にコピーして、Gemini API キーを設定してください。
 
 ```bash
@@ -29,17 +31,50 @@ GEMINI_API_KEY=あなたのAPIキー
 PORT=3000
 ```
 
-### 3. アプリケーションの起動
+#### 3. アプリケーションの起動
 ```bash
 npm run dev
 ```
 
-### 4. ブラウザでアクセス
+#### 4. ブラウザでアクセス
 ```
 http://localhost:3000
 ```
 
+### 方法2: Dockerを使用した実行
+
+#### 1. 環境変数の設定
+`.env`ファイルにGemini API キーを設定してください。
+
+#### 2. Docker Composeで起動
+```bash
+docker-compose up -d
+```
+
+#### 3. ブラウザでアクセス
+```
+http://localhost:3000
+```
+
+#### 停止
+```bash
+docker-compose down
+```
+
 ## API エンドポイント
+
+### GET /api/health
+
+アプリケーションの状態を確認します。
+
+**レスポンス:**
+```json
+{
+  "status": "ok",
+  "timestamp": "2024-01-02T06:00:00.000Z",
+  "version": "1.0.0"
+}
+```
 
 ### POST /api/recipe
 
@@ -59,6 +94,13 @@ http://localhost:3000
 ```json
 {
   "result": "料理名: ツナトマトサンド\n材料: ...\n作り方: ..."
+}
+```
+
+**エラーレスポンス:**
+```json
+{
+  "error": "食材リストは必須です"
 }
 ```
 
