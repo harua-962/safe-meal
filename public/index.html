@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Meal Vision</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fcfcfc; }
+        h1 { color: #ff6b6b; text-align: center; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        
+        /* ボタン類のデザイン */
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .toggle-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; text-align: center; }
+        .toggle-btn.active { background-color: #ff6b6b; color: white; border-color: #ff6b6b; }
+        
+        /* 警告や結果表示 */
+        .recipe-title { font-size: 1.4em; color: #333; border-bottom: 2px solid #ff6b6b; padding-bottom: 5px; margin-bottom: 10px; }
+        .warning { color: red; font-weight: bold; border: 1px solid red; padding: 10px; border-radius: 6px; background: #fff0f0; font-size: 0.9em; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>Safe Meal Vision </h1>
+    <p style="text-align: center; font-size: 0.9em;">今ある食材を入力だけ。AIが安全なレシピを提案。</p>
+    
+    <div class="card">
+        <label style="margin-bottom: 0.2em;">🥗 食材リスト (カンマ区切り・必須)</label>
+        <input type="text" id="ingredientsInput" placeholder="例: パン, ツナ缶, トマト" style="width: 100%; padding: 10px; box-sizing: border-box;" required>
+    
+        <label style="margin-top: 15px;">📝 食材メモ (補足・任意)</label>
+        <input type="text" id="ingredientsMemo" placeholder="例: 賞味期限切れのパンがあります" style="width: 100%; padding: 10px; box-sizing: border-box;">
+    </div>
+
+    <div class="card">
+        <label>🔦 使えるライフライン</label>
+        <div class="btn-group" id="lifelines">
+            <div class="toggle-btn" data-value="電気">電気</div>
+            <div class="toggle-btn" data-value="ガス">ガス</div>
+            <div class="toggle-btn active" data-value="水">水</div>
+        </div>
+
+        <label style="margin-top: 15px;">🥜 アレルギー (絶対除去)</label>
+        <div class="btn-group" id="allergies">
+            <div class="toggle-btn" data-value="卵">卵</div>
+            <div class="toggle-btn" data-value="乳">乳</div>
+            <div class="toggle-btn" data-value="小麦">小麦</div>
+            <div class="toggle-btn" data-value="えび">えび</div>
+            <div class="toggle-btn" data-value="かに">かに</div>
+        </div>
+        <input type="text" id="otherAllergy" placeholder="その他 (例: そば, 落花生)" style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;">
+        
+       
+    </div>
+
+    <div class="card">
+        <button id="analyze-btn"
+        style="width: 100%; padding: 15px; margin-top: 20px; background-color: #ff6b6b; color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        この条件でレシピを聞く 🍳
+        </button>
+    </div>
+
+    <div id="loading" style="text-align: center; margin-top: 20px; display: none;">AIシェフが思考中...🍳</div>
+    
+    <div class="card" id="resultCard" style="display: none;">
+        <div class="warning">⚠️ AI生成レシピです。アレルギー情報は必ずご自身でも最終確認してください。</div>
+        <div id="resultContent"></div>
+    </div>
+
+
+    
+    <script src="script.js"></script>
+
+</body>
+</html>

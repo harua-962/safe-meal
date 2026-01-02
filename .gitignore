@@ -1,0 +1,15 @@
+# Node modules
+node_modules/
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# build artifacts
+dist/
+build/
+
+# IDE / OS
+.vscode/
+.DS_Store.env
