@@ -36,7 +36,7 @@ app. use((req, res, next) => {
 
 // Gemini APIの準備 - より利用制限の緩いモデルに変更
 const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
 // 入力バリデーション関数
 function validateRecipeRequest(body: any): { valid: boolean; error?: string } {
