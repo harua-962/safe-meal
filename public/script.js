@@ -18,15 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ページ切り替え関数
     function showInputPage() {
-        inputPage. classList.add('active');
+        inputPage.classList.add('active');
         resultPage.classList.remove('active');
-        window.scrollTo(0, 0);
+        // ページ切り替え時に確実にトップにスクロール
+        setTimeout(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }, 0);
     }
 
     function showResultPage() {
         inputPage.classList.remove('active');
         resultPage.classList.add('active');
-        window.scrollTo(0, 0);
+        // ページ切り替え時に確実にトップにスクロール
+        setTimeout(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }, 0);
     }
 
     // SNS共有URL生成関数
