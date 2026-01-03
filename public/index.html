@@ -27,8 +27,8 @@
         /* 食材メモUIのスタイル */
         .ingredients-memo-area {
             border: 2px dashed #ddd;
-            border-radius: 8px;
-            padding: 10px;
+            border-radius:  8px;
+            padding:  10px;
             min-height: 120px;
             background-color: #fffef8;
             position: relative;
@@ -119,13 +119,13 @@
         /* 戻るボタンのスタイル */
         #back-btn {
             width: 100%;
-            padding: 15px;
+            padding:  15px;
             margin-top: 20px;
             background-color: #4E494C;
-            color:  white;
+            color: white;
             border: none;
             border-radius: 8px;
-            font-size:  1.1em;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -138,33 +138,49 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
-        /* SNS共有ボタンのスタイル */
+        /* SNS共有ボタンのスタイル（新デザイン） */
+        .share-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top:  2px solid #f0f0f0;
+        }
+        
+        .share-label {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
         .share-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            justify-content: center;
+            gap: 20px;
         }
         
         .share-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size:  1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
             text-decoration: none;
-            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: relative;
         }
         
         .share-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .share-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
         }
         
         .share-btn.line {
@@ -172,15 +188,37 @@
         }
         
         .share-btn.line:hover {
-            background-color: #05B04C;
+            background-color: #06C755;
         }
         
         .share-btn.twitter {
-            background-color: #1DA1F2;
+            background-color: #000000;
         }
         
         .share-btn.twitter:hover {
-            background-color: #1A91DA;
+            background-color: #000000;
+        }
+        
+        /* ツールチップ */
+        .share-btn::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius:  4px;
+            font-size: 0.75em;
+            white-space:  nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .share-btn:hover::after {
+            opacity: 1;
         }
         
         /* 警告や結果表示 */
@@ -195,12 +233,12 @@
         .warning { 
             color: red; 
             font-weight: bold; 
-            border: 1px solid red; 
+            border:  1px solid red; 
             padding: 10px; 
             border-radius: 6px; 
             background:  #fff0f0; 
             font-size: 0.9em; 
-            margin-bottom:  15px; 
+            margin-bottom: 15px; 
         }
         
         #resultContent {
@@ -264,9 +302,26 @@
         <div class="card">
             <div class="warning">⚠️ AI生成レシピです。アレルギー情報は必ずご自身でも最終確認してください。</div>
             
-            <h2 style="color:#ff6b6b; border-bottom: 2px solid #ff6b6b; padding-bottom: 10px; margin-bottom: 20px;">🍳 提案レシピ</h2>
+            <h2 style="color:#ff6b6b; border-bottom:  2px solid #ff6b6b; padding-bottom: 10px; margin-bottom: 20px;">🍳 提案レシピ</h2>
             
             <div id="resultContent"></div>
+            
+            <!-- SNS共有ボタン（新デザイン） -->
+            <div class="share-section">
+                <div class="share-label">🔗 このレシピをシェア</div>
+                <div class="share-buttons">
+                    <a id="lineShareBtn" class="share-btn line" href="#" target="_blank" rel="noopener noreferrer" data-label="LINEで共有">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19. 365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-. 345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-. 174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-. 279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466. 629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 . 344-.282.629-.629.629M24 10.314C24 4.943 18.615. 572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-. 164 1.02c-.045.301-.24 1.186 1.049. 645 1.291-. 539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                        </svg>
+                    </a>
+                    <a id="twitterShareBtn" class="share-btn twitter" href="#" target="_blank" rel="noopener noreferrer" data-label="Xで共有">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div class="card">
@@ -277,7 +332,6 @@
     </div>
 
     <script src="script.js"></script>
-    
 
 </body>
 </html>
