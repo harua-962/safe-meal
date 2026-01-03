@@ -17,22 +17,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIngredients = '';
 
     // ページ切り替え関数
+    function scrollToTop() {
+        // ページ切り替え時に確実にトップにスクロール
+        requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        });
+    }
+
     function showInputPage() {
         inputPage.classList.add('active');
         resultPage.classList.remove('active');
-        // ページ切り替え時に確実にトップにスクロール
-        setTimeout(() => {
-            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-        }, 0);
+        scrollToTop();
     }
 
     function showResultPage() {
         inputPage.classList.remove('active');
         resultPage.classList.add('active');
-        // ページ切り替え時に確実にトップにスクロール
-        setTimeout(() => {
-            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-        }, 0);
+        scrollToTop();
     }
 
     // SNS共有URL生成関数
