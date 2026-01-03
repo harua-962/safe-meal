@@ -132,3 +132,5 @@ app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, 
 app.listen(port, () => {
     console.log(`サーバー起動: http://localhost:${port}`);
 });
+
+//test
