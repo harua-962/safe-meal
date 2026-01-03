@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 共有用のテキストを生成（最初の100文字程度）
         const recipeTitle = currentRecipeText.split('\n')[0] || '災害時レシピ';
-        const shareText = `Safe Meal Vision 🍽️\n${currentIngredients}で作る災害時レシピを生成しました！\n\n${recipeTitle}`;
+        const shareText = `Safe Meal 🍽️\n${currentIngredients}で作る災害時レシピを生成しました！\n\n${recipeTitle}`;
         
         // LINEの共有URL
         const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(appUrl)}&text=${encodeURIComponent(shareText)}`;
@@ -80,8 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     analyzeBtn.addEventListener('click', async () => {
         // 入力値の取得と整形
         const rawInput = ingredientsInput.value. trim();
-        
-        // 改行で分割して、空行やスペースのみの行を除去し、カンマ区切りに変換
+       
         const ingredients = rawInput
             .split('\n')
             .map(line => line.trim())
