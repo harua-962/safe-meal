@@ -88,8 +88,8 @@ app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, 
         // 水のみの場合の制約を設定
         let cookingConstraint = '';
         if (hasWaterOnly) {
+            // 水のみが利用可能で、電気とガスが使えない場合
             cookingConstraint = `
-        
         【重要な制約】
         - 利用可能なのは水のみで、電気もガスも使えません
         - 加熱調理は一切できません（煮る、焼く、炒める、茹でる、温める等は全て不可）
@@ -97,14 +97,14 @@ app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, 
         - 生では食べられない食材（生肉、生魚、生卵など）が含まれている場合は、レシピを提案せず、「水のみでは調理できません。加熱が必要な食材が含まれています。」と返答してください
         - 缶詰やレトルト食品など、そのまま食べられる加工食品は使用可能です`;
         } else if (!hasElectricity && !hasGas) {
+            // 電気もガスも使えない場合（水すら利用できない可能性がある）
             cookingConstraint = `
-        
         【重要な制約】
         - 加熱調理はできません
         - 生で安全に食べられる食材のみを使用してください`;
         } else {
+            // 電気またはガスが利用可能な場合
             cookingConstraint = `
-        
         【調理方法の制約】
         - 利用可能なライフライン: ${lifelines.join(', ')}
         - 利用できないライフラインでの調理方法は使用しないでください`;
