@@ -80,12 +80,43 @@ app.post('/api/recipe', async (req: Request<{}, RecipeResponse | ErrorResponse, 
 
         const { ingredients, memo, lifelines, allergies } = req. body;
 
+        // ライフラインの状況を判断
+        const hasElectricity = lifelines.includes('電気');
+        const hasGas = lifelines.includes('ガス');
+        const hasWaterOnly = lifelines.includes('水') && !hasElectricity && !hasGas;
+
+        // 水のみの場合の制約を設定
+        let cookingConstraint = '';
+        if (hasWaterOnly) {
+            cookingConstraint = `
+        
+        【重要な制約】
+        - 利用可能なのは水のみで、電気もガスも使えません
+        - 加熱調理は一切できません（煮る、焼く、炒める、茹でる、温める等は全て不可）
+        - 生で安全に食べられる食材のみを使用してください
+        - 生では食べられない食材（生肉、生魚、生卵など）が含まれている場合は、レシピを提案せず、「水のみでは調理できません。加熱が必要な食材が含まれています。」と返答してください
+        - 缶詰やレトルト食品など、そのまま食べられる加工食品は使用可能です`;
+        } else if (!hasElectricity && !hasGas) {
+            cookingConstraint = `
+        
+        【重要な制約】
+        - 加熱調理はできません
+        - 生で安全に食べられる食材のみを使用してください`;
+        } else {
+            cookingConstraint = `
+        
+        【調理方法の制約】
+        - 利用可能なライフライン: ${lifelines.join(', ')}
+        - 利用できないライフラインでの調理方法は使用しないでください`;
+        }
+
         const prompt = `
         以下の条件で災害時レシピを1つ提案してください。
         【食材】: ${ingredients.trim()}
         【メモ】: ${memo ? memo.trim() : 'なし'}
         【ライフライン】: ${lifelines.join(', ')}
         【アレルギー除去】: ${allergies.length > 0 ? allergies.join(', ') : 'なし'}
+        ${cookingConstraint}
         
         以下の形式で出力してください:
         
